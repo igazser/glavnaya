@@ -56,8 +56,7 @@ def home():
     </head>
     <body>
         <a href="/login">
-            <img src="https://raw.githubusercontent.com/igazser/glavnaya/refs/heads/main/Image.jpeg?token=GHSAT0AAAAAAC7RFEJRFRY7LFNYP23QY6NOZ55XL6Q" 
-                 alt="Нажмите для авторизации" class="clickable-image">
+            <img src="https://raw.githubusercontent.com/igazser/glavnaya/main/Image.jpeg" alt="Нажмите для авторизации" class="clickable-image">
         </a>
     </body>
     </html>
