@@ -3,7 +3,7 @@ from flask import Flask, render_template_string, request, redirect, url_for, ses
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # Секретный ключ для сессий
 
-# ✅ Список пользователей (логин: пароль)
+# ✅ Список пользователей
 users = {
     'dnkarpenko@gmail.com': '20F001N',
     'user2': 'pass2',
@@ -17,11 +17,11 @@ users = {
     'user10': 'pass10'
 }
 
-# ✅ Главная страница (черный фон)
+# ✅ Главная страница
 @app.route('/')
 def home():
     if 'username' in session:
-        return redirect(url_for('dashboard'))  # Если вошел – сразу на дашборд
+        return redirect(url_for('dashboard'))  
 
     main_page = '''
     <!DOCTYPE html>
@@ -59,7 +59,7 @@ def home():
     '''
     return render_template_string(main_page)
 
-# ✅ Страница логина (черный фон)
+# ✅ Страница логина
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -138,20 +138,20 @@ def login():
     '''
     return render_template_string(login_form)
 
-# ✅ Дашборд (черный фон, имя пользователя исправлено)
+# ✅ Дашборд (черный фон, SUPER TABLE)
 @app.route('/dashboard')
 def dashboard():
     if 'username' not in session:
-        return redirect(url_for('login'))  # Если не авторизован, перекидываем на логин
+        return redirect(url_for('login'))  
 
-    username = session['username']  # Исправлено, чтобы корректно показывало имя
+    username = session['username']  
 
     dashboard_page = '''
     <!DOCTYPE html>
     <html lang="ru">
     <head>
         <meta charset="UTF-8">
-        <title>SUPER TABLE</title>
+        <title>Материалы</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -191,10 +191,17 @@ def dashboard():
         <h1>Добро пожаловать, <span style="color:#4CAF50;">{{ username }}</span>!</h1>
         <p>Выберите материал:</p>
         <div class="container">
-            {% for i in range(12) %}
+            <!-- SUPER TABLE -->
+            <div class="card">
+                <img src="https://raw.githubusercontent.com/igazser/glavnaya/main/image.jpeg" alt="SUPER TABLE">
+                <h3>SUPER TABLE</h3>
+                <a href="https://docs.google.com/spreadsheets/d/1qT_uzAncSuYGHzi_-QlxT0azb_ERhm4JmWT4zL_y8ZM/edit?gid=0#gid=0" target="_blank">Подробнее</a>
+            </div>
+            
+            {% for i in range(11) %}
             <div class="card">
                 <img src="https://raw.githubusercontent.com/igazser/glavnaya/main/image.jpeg" alt="Материал">
-                <h3>Материал {{ i+1 }}</h3>
+                <h3>Материал {{ i+2 }}</h3>
                 <a href="#">Подробнее</a>
             </div>
             {% endfor %}
