@@ -17,7 +17,7 @@ users = {
     'user10': 'pass10'
 }
 
-# ✅ Главная страница
+# ✅ Главная страница (черный фон)
 @app.route('/')
 def home():
     if 'username' in session:
@@ -36,14 +36,14 @@ def home():
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background-color: #f0f0f0;
+                background-color: #000;
             }
             .clickable-image {
                 cursor: pointer;
                 width: 400px;
                 border-radius: 15px;
                 transition: transform 0.3s ease;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
             }
             .clickable-image:hover {
                 transform: scale(1.1);
@@ -59,7 +59,7 @@ def home():
     '''
     return render_template_string(main_page)
 
-# ✅ Страница логина
+# ✅ Страница логина (черный фон)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -70,7 +70,7 @@ def login():
             session['username'] = username
             return redirect(url_for('dashboard'))
         else:
-            return '<h2>❌ Неверный логин или пароль. <a href="/login">Попробуйте снова</a></h2>'
+            return '<h2 style="color:red;">❌ Неверный логин или пароль. <a href="/login" style="color:green;">Попробуйте снова</a></h2>'
 
     login_form = '''
     <!DOCTYPE html>
@@ -81,31 +81,34 @@ def login():
         <style>
             body {
                 font-family: Arial, sans-serif;
-                background-color: #f2f2f2;
+                background-color: #000;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
                 margin: 0;
+                color: #fff;
             }
             .login-container {
-                background-color: #fff;
+                background-color: #222;
                 padding: 30px 40px;
                 border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 8px rgba(255,255,255,0.1);
                 width: 300px;
                 text-align: center;
             }
             h2 {
                 margin-bottom: 20px;
-                color: #333;
+                color: #4CAF50;
             }
             input[type="text"], input[type="password"] {
                 width: 100%;
                 padding: 10px;
                 margin: 10px 0;
-                border: 1px solid #ccc;
+                border: 1px solid #4CAF50;
                 border-radius: 5px;
+                background-color: #333;
+                color: #fff;
             }
             input[type="submit"] {
                 background-color: #4CAF50;
@@ -135,11 +138,13 @@ def login():
     '''
     return render_template_string(login_form)
 
-# ✅ Дашборд (страница после входа)
+# ✅ Дашборд (черный фон, имя пользователя исправлено)
 @app.route('/dashboard')
 def dashboard():
     if 'username' not in session:
         return redirect(url_for('login'))  # Если не авторизован, перекидываем на логин
+
+    username = session['username']  # Исправлено, чтобы корректно показывало имя
 
     dashboard_page = '''
     <!DOCTYPE html>
@@ -150,7 +155,7 @@ def dashboard():
         <style>
             body {
                 font-family: Arial, sans-serif;
-                background-color: #121212;
+                background-color: #000;
                 color: #fff;
                 margin: 0;
                 padding: 20px;
@@ -161,7 +166,7 @@ def dashboard():
                 justify-content: center;
             }
             .card {
-                background: #1e1e1e;
+                background: #111;
                 padding: 20px;
                 margin: 10px;
                 width: 250px;
@@ -183,10 +188,9 @@ def dashboard():
         </style>
     </head>
     <body>
-        <h1>Добро пожаловать, {session['username']}!</h1>
+        <h1>Добро пожаловать, <span style="color:#4CAF50;">{{ username }}</span>!</h1>
         <p>Выберите материал:</p>
         <div class="container">
-            <!-- Карточки-заглушки -->
             {% for i in range(12) %}
             <div class="card">
                 <img src="https://raw.githubusercontent.com/igazser/glavnaya/main/image.jpeg" alt="Материал">
@@ -196,11 +200,11 @@ def dashboard():
             {% endfor %}
         </div>
         <br>
-        <a href="/logout">Выйти</a>
+        <a href="/logout" style="color:red;">Выйти</a>
     </body>
     </html>
     '''
-    return render_template_string(dashboard_page)
+    return render_template_string(dashboard_page, username=username)
 
 # ✅ Выход из системы
 @app.route('/logout')
