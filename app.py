@@ -17,16 +17,12 @@ users = {
     'user10': 'pass10'
 }
 
-# ✅ Главная страница с добавленной картинкой
+# ✅ Главная страница
 @app.route('/')
 def home():
     if 'username' in session:
-        return f"""<h2>🚀 Привет, {session['username']}!</h2>
-                   <p>✅ Ваш сайт работает на Heroku через GitHub.</p>
-                   <p>🔒 Делаем авторизацию 111111</p>
-                   <a href="/logout">Выйти</a>"""
-    
-    # ✅ Используем прямую ссылку на картинку из GitHub
+        return redirect(url_for('dashboard'))  # Если вошел – сразу на дашборд
+
     main_page = '''
     <!DOCTYPE html>
     <html lang="ru">
@@ -72,7 +68,7 @@ def login():
 
         if username in users and users[username] == password:
             session['username'] = username
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard'))
         else:
             return '<h2>❌ Неверный логин или пароль. <a href="/login">Попробуйте снова</a></h2>'
 
@@ -123,10 +119,6 @@ def login():
             input[type="submit"]:hover {
                 background-color: #45a049;
             }
-            .error {
-                color: red;
-                margin-top: 10px;
-            }
         </style>
     </head>
     <body>
@@ -143,6 +135,73 @@ def login():
     '''
     return render_template_string(login_form)
 
+# ✅ Дашборд (страница после входа)
+@app.route('/dashboard')
+def dashboard():
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Если не авторизован, перекидываем на логин
+
+    dashboard_page = '''
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Материалы</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #121212;
+                color: #fff;
+                margin: 0;
+                padding: 20px;
+            }
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .card {
+                background: #1e1e1e;
+                padding: 20px;
+                margin: 10px;
+                width: 250px;
+                border-radius: 10px;
+                text-align: center;
+                transition: transform 0.3s ease;
+            }
+            .card:hover {
+                transform: scale(1.05);
+            }
+            img {
+                width: 100%;
+                border-radius: 10px;
+            }
+            a {
+                text-decoration: none;
+                color: #4CAF50;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Добро пожаловать, {session['username']}!</h1>
+        <p>Выберите материал:</p>
+        <div class="container">
+            <!-- Карточки-заглушки -->
+            {% for i in range(12) %}
+            <div class="card">
+                <img src="https://raw.githubusercontent.com/igazser/glavnaya/main/image.jpeg" alt="Материал">
+                <h3>Материал {{ i+1 }}</h3>
+                <a href="#">Подробнее</a>
+            </div>
+            {% endfor %}
+        </div>
+        <br>
+        <a href="/logout">Выйти</a>
+    </body>
+    </html>
+    '''
+    return render_template_string(dashboard_page)
+
 # ✅ Выход из системы
 @app.route('/logout')
 def logout():
@@ -151,3 +210,4 @@ def logout():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
