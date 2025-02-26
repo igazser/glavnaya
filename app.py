@@ -151,7 +151,7 @@ def dashboard():
     <html lang="ru">
     <head>
         <meta charset="UTF-8">
-        <title>Материалы</title>
+        <title>SUPER TABLE</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
